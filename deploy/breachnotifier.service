@@ -1,0 +1,13 @@
+[Unit]
+Description=BreachNotifier Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/breachnotifier
+WorkingDirectory=/opt/breachnotifier
+Restart=always
+User=breachnotifier
+Group=breachnotifier
+
+[Install]
+WantedBy=multi-user.target
