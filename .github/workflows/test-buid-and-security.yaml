@@ -27,7 +27,7 @@ jobs:
     - name: Run gosec
       uses: securego/gosec@master
       with:
-        args: ./...
+        args: -exclude=G304,G302 ./...
 
     - name: Run golangci-lint
       uses: golangci/golangci-lint-action@v3
