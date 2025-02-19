@@ -37,3 +37,39 @@ jobs:
 
     - name: Run ShellCheck
       run: shellcheck deploy/install.sh
+
+    - name: Checkout the code
+      uses: actions/checkout@v2
+
+    - name: Run GoKart
+      uses: kitabisa/gokart-action@v1.0.0
+      with:
+        globalsTainted: true # Option pour marquer les variables globales comme dangereuses
+
+    - name: Upload SARIF results for GoKart
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: results.sarif # Fichier SARIF généré par GoKart
+
+ # Job pour ShiftLeftSecurity
+
+    - name: Checkout the code
+      uses: actions/checkout@v2
+    
+    - name: Install ShiftLeft CLI
+      run: |
+        curl https://www.shiftleft.io/download/sl-latest-linux-x64.tar.gz > /tmp/sl.tar.gz
+        sudo tar -C /usr/local/bin -xzf /tmp/sl.tar.gz
+
+    - name: Run ShiftLeft Scan
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
+      run: |
+        sl analyze --app my-go-app --go --wait
+
+    - name: Upload ShiftLeft Reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: shiftleft-report
+        path: reports/
