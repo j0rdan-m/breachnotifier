@@ -46,11 +46,6 @@ jobs:
       with:
         globalsTainted: true # Option pour marquer les variables globales comme dangereuses
 
-    - name: Upload SARIF results for GoKart
-      uses: github/codeql-action/upload-sarif@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169
-      with:
-        sarif_file: ${{ steps.scan.outputs.sarif }}
-
  # Job pour ShiftLeftSecurity
 
     - name: Checkout the code
